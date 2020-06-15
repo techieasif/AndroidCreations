@@ -1,9 +1,13 @@
 package com.techieasif.stopwatch;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,10 +15,16 @@ public class MainActivity extends AppCompatActivity {
     private int seconds = 0;
     private boolean running;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState != null){
+            seconds = savedInstanceState.getInt("seconds");
+            running = savedInstanceState.getBoolean("running");
+        }
         runTimer();
     }
 
@@ -46,10 +56,21 @@ public class MainActivity extends AppCompatActivity {
                 if(running){
                     seconds++;
                 }
+                Log.i("Home", "Run Called");
                 handler.postDelayed(this, 1000);
             }
         });
 
 
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        outState.putInt("seconds", seconds);
+        outState.putBoolean("running", running);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+
+
 }
